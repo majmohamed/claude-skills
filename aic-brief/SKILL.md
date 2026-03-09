@@ -15,24 +15,24 @@ Reads the AI Council channel (#ai-council), pulls all weekly updates from the la
 - **Time window**: Last 7 days (calculate Unix timestamp for 7 days ago and use as `oldest` parameter)
 - Pull up to 100 messages to capture all weekly updates
 
-### Step 2 - Identify weekly update threads
+### Step 2 - Filter to weekly update posts ONLY
 
-- Weekly updates are typically threaded posts - look for messages that are thread parents (have replies)
-- Look for messages that read like personal weekly updates (topics worked on, status updates, priorities, concerns)
-- For each identified update thread, use `slack_get_thread` to pull the full thread content
+- From the messages pulled in Step 1, filter to **only** posts where the header/parent message contains the word "update" (case-insensitive)
+- These are personal weekly updates from AIC members (e.g., "Ben update :thread:", "Purvi update :thread:", "Dave update :thread:", "OMAI Update", "Prashant (Supercomputing) Update :thread:")
+- **Ignore** all other threads - discussion threads, questions, agenda posts, competitive intel shares, presentation suggestions, etc. Only the personal "update" posts matter
+- For each identified update post, use `slack_get_thread` to pull the full thread content
 - Record the author (user name and user ID) for each update
-- Also check for standalone (non-threaded) update messages
 
 ### Step 3 - Analyze for signal
 
-For each update thread, use `slack_get_reactions` on the parent message to get reaction counts.
+For each update post, use `slack_get_reactions` on the parent message to get reaction counts.
 
-Score and rank content across all updates using these criteria (in priority order):
+Score and rank content **within the weekly update posts only** using these criteria (in priority order):
 
-1. **Most reactions** - items that got the most emoji reactions from the group indicate high-signal content
-2. **Most thread replies/chatter** - items that generated discussion or follow-up questions
-3. **Common themes** - topics that appear across multiple people's updates (e.g., if 3+ people mention compute allocation, that's a theme)
-4. **Flagged concerns** - anything explicitly called out as a risk, blocker, worry, or red flag
+1. **Common themes** - topics that appear across multiple people's updates (e.g., if 3+ people mention Neptune, Run 5 data, or hiring - that's a theme worth surfacing)
+2. **Most reactions** - update posts that got the most emoji reactions from the group indicate high-signal content
+3. **Most thread replies/chatter** - updates that generated follow-up discussion or questions from others
+4. **Flagged concerns** - anything explicitly called out as a worry, risk, blocker, or lowlight in someone's update
 
 ### Step 4 - Synthesize into max 5 bullets
 
