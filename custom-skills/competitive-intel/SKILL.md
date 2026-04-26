@@ -6,6 +6,24 @@ Pulls competitor signals from Slack channels and web search, maintains a running
 
 ---
 
+### Date & Timestamp Accuracy
+
+CRITICAL: All date-based filtering depends on the current date provided in the system context (e.g., "Today's date is YYYY-MM-DD").
+
+**Unix timestamp calculation:**
+- Reference point: 2026-01-01 00:00:00 UTC = 1767225600
+- Add 86400 per day from there
+- For a 14-day lookback: subtract 1209600 from today's timestamp
+
+**Validation (MANDATORY):**
+- After retrieving Slack messages, check the dates of the returned messages
+- If ALL returned messages are older than your target window, your timestamp was calculated incorrectly - recalculate and retry
+- Confirm the most recent message is from the current month/year. If you see content from a prior year (e.g., 2025 when it should be 2026), STOP and recalculate
+- For `slack_search_messages`, always include `after:YYYY-MM-DD` using the calculated start date
+- For web searches, always use the current year from the system context (do NOT hardcode a year like "2026") - construct the year dynamically
+
+---
+
 ## Companies Tracked
 
 1. **OpenAI** - GPT models, o-series, reasoning, infrastructure scale
@@ -63,9 +81,9 @@ Also search via `slack_search_messages` for recent competitor mentions:
 ### Step 3 - Web search for breaking news
 
 Run web searches for each tracked company:
-- `OpenAI model release 2026` / `OpenAI infrastructure compute 2026`
-- `Anthropic Claude model 2026` / `Anthropic training infrastructure 2026`
-- `Google DeepMind Gemini model 2026` / `Google TPU infrastructure 2026`
+- `OpenAI model release [CURRENT_YEAR]` / `OpenAI infrastructure compute [CURRENT_YEAR]` (use the current year from system context, e.g., if "Today's date is 2026-04-26" then use "2026")
+- `Anthropic Claude model [CURRENT_YEAR]` / `Anthropic training infrastructure [CURRENT_YEAR]`
+- `Google DeepMind Gemini model [CURRENT_YEAR]` / `Google TPU infrastructure [CURRENT_YEAR]`
 
 Focus on:
 - New model announcements or benchmark results

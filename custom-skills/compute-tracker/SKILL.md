@@ -6,13 +6,30 @@ Reads #ai-cluster-util for compute allocation data, maintains a structured JSON 
 
 ---
 
+### Date & Timestamp Accuracy
+
+CRITICAL: All date-based filtering depends on the current date provided in the system context (e.g., "Today's date is YYYY-MM-DD").
+
+**Unix timestamp calculation:**
+- Reference point: 2026-01-01 00:00:00 UTC = 1767225600
+- Add 86400 per day from there
+- For a 7-day lookback: subtract 604800 from today's timestamp
+
+**Validation (MANDATORY):**
+- After retrieving Slack messages, check the dates of the returned messages
+- If ALL returned messages are older than your target window, your timestamp was calculated incorrectly - recalculate and retry
+- Confirm the most recent message is from the current month/year. If you see content from a prior year (e.g., 2025 when it should be 2026), STOP and recalculate
+- For `slack_search_messages`, always include `after:YYYY-MM-DD` using the calculated start date
+
+---
+
 ## Workflow
 
 ### Step 1 - Read #ai-cluster-util messages from the last 7 days
 
 - Use Slack MCP `slack_conversations_history` to read recent messages from #ai-cluster-util
 - **Channel ID**: `C08DN2YG5LH`
-- **Time window**: Last 7 days (calculate Unix timestamp for 7 days ago and use as `oldest` parameter)
+- **Time window**: Last 7 days (calculate Unix timestamp for 7 days ago and use as `oldest` parameter). Reference: 2026-01-01 00:00:00 UTC = 1767225600. Add 86400 per day from there, then subtract 604800 for 7 days
 - Pull up to 100 messages
 - For any messages with threads, use `slack_get_thread` to pull the full thread content - allocation details are often in replies
 - **Only read from #ai-cluster-util** - no other channels

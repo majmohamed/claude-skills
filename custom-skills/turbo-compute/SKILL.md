@@ -6,6 +6,23 @@ Manages turbo (surge) compute allocations on a sprint-by-sprint basis. Tracks al
 
 ---
 
+### Date & Timestamp Accuracy
+
+CRITICAL: All date-based filtering depends on the current date provided in the system context (e.g., "Today's date is YYYY-MM-DD").
+
+**Unix timestamp calculation:**
+- Reference point: 2026-01-01 00:00:00 UTC = 1767225600
+- Add 86400 per day from there
+- For a 14-day lookback: subtract 1209600 from today's timestamp
+
+**Validation (MANDATORY):**
+- After retrieving Slack messages, check the dates of the returned messages
+- If ALL returned messages are older than your target window, your timestamp was calculated incorrectly - recalculate and retry
+- Confirm the most recent message is from the current month/year. If you see content from a prior year (e.g., 2025 when it should be 2026), STOP and recalculate
+- For `slack_search_messages`, always include `after:YYYY-MM-DD` using the calculated start date
+
+---
+
 ## Key files
 
 | File | Path | Purpose |

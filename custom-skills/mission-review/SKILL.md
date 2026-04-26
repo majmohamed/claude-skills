@@ -6,6 +6,24 @@ Reviews MSI squad and workstream missions for quality of writing (clarity, falsi
 
 ---
 
+### Date & Timestamp Accuracy
+
+CRITICAL: All date-based filtering depends on the current date provided in the system context (e.g., "Today's date is YYYY-MM-DD").
+
+**Unix timestamp calculation:**
+- Reference point: 2026-01-01 00:00:00 UTC = 1767225600
+- Add 86400 per day from there
+- For a 90-day lookback: subtract 7776000 from today's timestamp
+
+**Validation (MANDATORY):**
+- After retrieving Slack messages, check the dates of the returned messages
+- If ALL returned messages are older than your target window, your timestamp was calculated incorrectly - recalculate and retry
+- Confirm the most recent message is from the current month/year. If you see content from a prior year (e.g., 2025 when it should be 2026), STOP and recalculate
+- For `slack_search_messages`, always include `after:YYYY-MM-DD` using the date 90 days ago as default
+- All Slack searches in this skill should be date-bounded to a rolling 90-day window unless Maj specifies otherwise
+
+---
+
 ## Workflow
 
 ### Step 1 - Gather missions
@@ -13,7 +31,7 @@ Reviews MSI squad and workstream missions for quality of writing (clarity, falsi
 Try these sources in order:
 
 1. **MAI Atlas** (preferred): Use WebFetch to pull MSI C2 missions from `https://mai-atlas.microsoft.com/missions?team=7&cycle=9`. If the page is accessible and contains structured mission data, parse it.
-2. **Slack search**: Search Slack for `MSI C2 squads missions one-pager` in channels like `#ai-tpgm-cycle-mgmt`, `#msi-team`, `#temp-c2-msi-closing-pres`. Look for Alexei Dunayev's posts about Atlas being ready, or links to one-pager canvases.
+2. **Slack search**: Search Slack for `MSI C2 squads missions one-pager after:YYYY-MM-DD` (using 90 days ago) in channels like `#ai-tpgm-cycle-mgmt`, `#msi-team`, `#temp-c2-msi-closing-pres`. Look for Alexei Dunayev's posts about Atlas being ready, or links to one-pager canvases.
 3. **Paste-in fallback**: If neither Atlas nor Slack yields usable mission data, ask Maj to paste in the missions or provide a file path. Use AskUserQuestion:
    - "I couldn't pull missions automatically. Can you paste them in or provide a file path?"
    - Option 1: "I'll paste them in"
@@ -29,7 +47,7 @@ Read the following files to ground the substance review:
    - `3. Strategy/Research/` - any strategic research outputs
    - `3. Strategy/Compute allocations/` - compute allocation context
    - `3. Strategy/MSI risk register/` - risk register for current risks
-3. **Previous cycle data**: Search Slack for C1 closing presentation or C1 mission statements to compare against. Query: `C1 closing MSI workstream mission` in `#msi-team` or `#ai-tpgm-cycle-mgmt`
+3. **Previous cycle data**: Search Slack for C1 closing presentation or C1 mission statements to compare against. Query: `C1 closing MSI workstream mission after:YYYY-MM-DD` (using 90 days ago) in `#msi-team` or `#ai-tpgm-cycle-mgmt`
 4. **Competitive intel**: Read `5. Automations/data/competitive-intel.md` if it exists, for grounding the "is this the right mission" assessment
 
 ### Step 3 - Confirm cycle and context with Maj
