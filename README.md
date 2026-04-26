@@ -2,17 +2,64 @@
 
 Personal Claude Code skills and plugins by Maj Mohamed.
 
-## Skills
+## Custom Skills
 
-### risk-register
+Automation and productivity skills for daily workflows.
 
-Adds entries to the MSI Issue Tracker / Risk Register Excel file. Triggered by phrases like "add to risk register", "add to issues list", "new risk", etc.
+| Skill | Description |
+|-------|-------------|
+| action-chaser | Chase outstanding actions from meetings |
+| aic-brief | Summarize AI Council weekly updates |
+| automated-loops | Run automated monitoring loops |
+| calendar-audit | Audit and analyze calendar usage |
+| check-actions | Check and track action items |
+| competitive-intel | Gather competitive intelligence |
+| compute-tracker | Track compute resource usage |
+| convert-2-doc | Convert content to document format |
+| daily-morning-briefing | Generate daily morning briefings |
+| decision-log | Log and track decisions |
+| eod-transcript-processor | Process end-of-day meeting transcripts |
+| expense-scanner | Scan and process expense receipts |
+| lenny-advisor | Lenny's Newsletter-style product advice |
+| maj-monday-briefing | Monday leadership briefing |
+| maj-weekly-update | Weekly update generator |
+| meeting-prep | Prepare for upcoming meetings |
+| mission-review | Review mission/strategy alignment |
+| mustafa-slt-writing | SLT writing style assistant |
+| process-meeting | Process meeting notes and actions |
+| strategic-research | Strategic research and analysis |
+| top-of-mind-refresh | Refresh top-of-mind priorities |
+| turbo-compute | Fast compute operations |
+| weekly-update-satya | Weekly update in Satya's format |
 
-**Features:**
-- Parses natural language to extract issue details (workstream, DRI, priority, RAG, horizon)
-- Interviews for missing fields using structured questions
-- Writes directly to the shared Excel tracker with proper formatting
-- Confirms additions with a summary table
+## Anthropic Skills
+
+Document generation, design, and development skills.
+
+| Skill | Description |
+|-------|-------------|
+| algorithmic-art | Generate algorithmic art |
+| brand-guidelines | Create brand guideline documents |
+| canvas-design | Design with canvas layouts |
+| doc-coauthoring | Co-author documents collaboratively |
+| docx | Generate Word (.docx) documents |
+| frontend-design | Frontend UI/UX design |
+| internal-comms | Draft internal communications |
+| mcp-builder | Build MCP servers |
+| pdf | Generate and manipulate PDFs |
+| pptx | Generate PowerPoint (.pptx) presentations |
+| skill-creator | Create new Claude skills |
+| slack-gif-creator | Create GIFs for Slack |
+| theme-factory | Generate UI themes |
+| webapp-testing | Test web applications |
+| web-artifacts-builder | Build web artifacts/components |
+| xlsx | Generate Excel (.xlsx) spreadsheets |
+
+## Other Skills
+
+| Skill | Description |
+|-------|-------------|
+| risk-register | Add entries to the MSI Issue Tracker / Risk Register |
 
 ## Installation
 
